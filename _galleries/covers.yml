@@ -2,7 +2,7 @@
 name: "covers"
 arts:
 # Row 1
-- image: "images/galleries/covers/IMG_9781.jpg"
+- image: "images/galleries/covers/IMG_9781.png"
   order: "1"
   artist: "Aaron Liu"
   title: "xxxx"
@@ -15,7 +15,7 @@ arts:
   description: "Original cover art by Adrian Ricker for Tristan J. Tarwater's graphic novel 'A Fistful of Lunars'."
  
 # Row 2
-- image: "images/galleries/covers/IMG_9783.jpg"
+- image: "images/galleries/covers/IMG_9783.png"
   order: "2"
   artist: "Sam Wood"
   title: "Self-Made Scoundrel"

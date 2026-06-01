@@ -2,10 +2,10 @@
 name: "illustration"
 arts:
 # Column 1
-- image: "images/galleries/illustration/AvenueinSchlossKammerPark.jpg"
+- image: "images/galleries/illustration/IMG_9776.png"
   order: "1"
   title: "Avenue in Schloss Kammer Park"
-  artist: "Gustav Klimt"
+  artist: "Aaron Liu"
   description: 
   
 - image: "images/galleries/illustration/Expectation.jpg"
@@ -21,7 +21,7 @@ arts:
   description: "description"
 
 # Column 2
-- image: "images/galleries/illustration/Baby.jpg"
+- image: "images/galleries/illustration/IMG_9777.png"
   order: "4"
   title: "Baby"
   artist: "Gustav Klimt"
@@ -40,7 +40,7 @@ arts:
   description: "description"
  
 # Column 3
-- image: "images/galleries/illustration/Birch-Trees.jpg"
+- image: "images/galleries/illustration/IMG_9779.png"
   order: "7"
   title: "Birch Trees"
   artist: "Gustav Klimt"
