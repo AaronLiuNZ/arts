@@ -4,9 +4,9 @@ arts:
 # Column 1
 - image: "images/galleries/illustration/IMG_9776.png"
   order: "1"
-  title: "Avenue in Schloss Kammer Park"
+  title: "Claude Monet master copy 2026"
   artist: "Aaron Liu"
-  description: 
+  description: "Acrylic on paper" 
   
 - image: "images/galleries/illustration/Expectation.jpg"
   order: "2"
@@ -17,15 +17,15 @@ arts:
 - image: "images/galleries/illustration/hygeia-detail-of-medicine-1907.jpg"
   order: "3"
   title: "title"
-  artist: "Gustav Klimt"
-  description: "description"
+  artist: "Aaron Liu"
+  description: "xxxx"
 
 # Column 2
 - image: "images/galleries/illustration/IMG_9777.png"
   order: "4"
-  title: "Baby"
-  artist: "Gustav Klimt"
-  description: "Image with a description. This could be more info about the medium, the client, the project itself, etc."
+  title: "Manet master copy 2026"
+  artist: "Aaron Liu"
+  description: "Oil on Paper"
 
 - image: "images/galleries/illustration/Lady-with-Hat-and-Feather-Boa.jpg"
   order: "5"
@@ -42,9 +42,9 @@ arts:
 # Column 3
 - image: "images/galleries/illustration/IMG_9779.png"
   order: "7"
-  title: "Birch Trees"
-  artist: "Gustav Klimt"
-  description: "asfsdfsdf"
+  title: "Self portrait 2026"
+  artist: "Aaron Liu"
+  description: "Oil on canvas board"
 
 - image: "images/galleries/illustration/Country-Garden-With-Sunflowers.jpg"
   order: "8"
