@@ -8,7 +8,7 @@ description: Witty description here.
 
 # Only use this if you are serving your site via Github Pages
 github:
-  url: "https://chrisanthropic.github.io/starving-artist-jekyll-theme"
+  url: "https://aaronliunz.github.io/arts"
 
 header: images/logo.png
 
@@ -25,7 +25,7 @@ markdown: kramdown
 kramdown:
   input: GFM
 
-theme: starving-artist-jekyll-theme
+#theme: starving-artist-jekyll-theme
   
 # Plugins
 gems:
