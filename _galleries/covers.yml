@@ -5,8 +5,8 @@ arts:
 - image: "images/galleries/covers/IMG_9781.png"
   order: "1"
   artist: "Aaron Liu"
-  title: "xxxx"
-  description: "xxxx"
+  title: "No title 2026"
+  description: "Charcoal on paper"
   
 - image: "images/galleries/covers/A-Fistful-of-Lunars.jpg"
   order: "5"
@@ -17,9 +17,9 @@ arts:
 # Row 2
 - image: "images/galleries/covers/IMG_9783.png"
   order: "2"
-  artist: "Sam Wood"
-  title: "Self-Made Scoundrel"
-  description: "Original cover art by Sam Wood for Tristan J. Tarwater's 'Self-Made Scoundrel' novel."
+  artist: "Aaron Liu"
+  title: "Self portrait 2026"
+  description: "Charcoal on paper"
   
 - image: "images/galleries/covers/Lone-Idiot-and-Cub.jpg"
   order: "6"
