@@ -2,11 +2,11 @@
 name: "covers"
 arts:
 # Row 1
-- image: "images/galleries/covers/Thieves-at-Heart.jpg"
+- image: "images/galleries/covers/IMG_9781.jpg"
   order: "1"
-  artist: "Sam Wood"
-  title: "Thieves at Heart"
-  description: "Original cover art by Sam Wood for Tristan J. Tarwater's 'Thieves at Heart' novel."
+  artist: "Aaron Liu"
+  title: "xxxx"
+  description: "xxxx"
   
 - image: "images/galleries/covers/A-Fistful-of-Lunars.jpg"
   order: "5"
@@ -15,7 +15,7 @@ arts:
   description: "Original cover art by Adrian Ricker for Tristan J. Tarwater's graphic novel 'A Fistful of Lunars'."
  
 # Row 2
-- image: "images/galleries/covers/Self-Made-Scoundrel.jpg"
+- image: "images/galleries/covers/IMG_9783.jpg"
   order: "2"
   artist: "Sam Wood"
   title: "Self-Made Scoundrel"
