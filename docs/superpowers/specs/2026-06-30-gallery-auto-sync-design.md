@@ -34,8 +34,13 @@ Python script: .github/scripts/sync_gallery.py
   7. Write updated YML
         │
         ▼
-Action commits renamed files + updated YML as "auto: sync gallery"
-(skipped via git diff --quiet if no changes)
+Action creates branch auto/gallery-sync-<YYYYMMDD-HHMMSS>
+commits renamed files + updated YML
+opens PR to main: "auto: sync gallery"
+(entire step skipped if no new images detected)
+        │
+        ▼
+Aaron reviews PR, merges when satisfied
 ```
 
 ## Files
@@ -101,9 +106,16 @@ on:
 ```
 
 Steps:
-1. Checkout repo with write permissions
+1. Checkout repo with write permissions (`contents: write`, `pull-requests: write`)
 2. Run `sync_gallery.py`
-3. If any files changed, commit renamed images + updated YML with message `auto: sync gallery` and push to main
+3. If any files changed:
+   - Create branch `auto/gallery-sync-<YYYYMMDD-HHMMSS>`
+   - Commit renamed images + updated YML with message `auto: sync gallery`
+   - Push branch
+   - Open PR to main using `gh pr create` with a summary of galleries and images added
+4. If no files changed, exit silently — no branch, no PR
+
+Each Action run produces at most one PR. Aaron reviews the diff, adjusts titles/descriptions in the YML if needed, and merges.
 
 ## Out of Scope
 
