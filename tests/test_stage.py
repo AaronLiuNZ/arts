@@ -1,8 +1,11 @@
+import json
 import os
 import pytest
 import yaml
 from PIL import Image
 from scripts.stage import append_meta, resize_image
+from unittest.mock import patch, MagicMock
+from scripts.stage import _parse_json, get_provider, ClaudeProvider, OpenAIProvider, GeminiProvider
 
 
 def make_image(tmp_path, width, height, fmt='JPEG', name='test.jpg'):
@@ -82,3 +85,52 @@ def test_append_meta_preserves_existing_entries(tmp_path):
     assert 'IMG_001.jpg' in data
     assert 'IMG_002.jpg' in data
     assert data['IMG_001.jpg']['title'] == 'First'
+
+
+def test_parse_json_clean():
+    result = _parse_json('{"title": "Art", "description": "A painting."}')
+    assert result == {'title': 'Art', 'description': 'A painting.'}
+
+
+def test_parse_json_markdown_fences():
+    text = '```json\n{"title": "Art", "description": "A painting."}\n```'
+    result = _parse_json(text)
+    assert result == {'title': 'Art', 'description': 'A painting.'}
+
+
+def test_parse_json_invalid_returns_none():
+    result = _parse_json('not valid json at all')
+    assert result is None
+
+
+def test_get_provider_explicit_claude(monkeypatch):
+    monkeypatch.setenv('ANTHROPIC_API_KEY', 'test-key')
+    provider = get_provider('claude')
+    assert isinstance(provider, ClaudeProvider)
+
+
+def test_get_provider_explicit_openai(monkeypatch):
+    monkeypatch.setenv('OPENAI_API_KEY', 'test-key')
+    provider = get_provider('openai')
+    assert isinstance(provider, OpenAIProvider)
+
+
+def test_get_provider_explicit_gemini(monkeypatch):
+    monkeypatch.setenv('GEMINI_API_KEY', 'test-key')
+    provider = get_provider('gemini')
+    assert isinstance(provider, GeminiProvider)
+
+
+def test_get_provider_auto_prefers_claude(monkeypatch):
+    monkeypatch.setenv('ANTHROPIC_API_KEY', 'test-key')
+    monkeypatch.setenv('OPENAI_API_KEY', 'test-key')
+    provider = get_provider()
+    assert isinstance(provider, ClaudeProvider)
+
+
+def test_get_provider_no_keys_raises(monkeypatch):
+    monkeypatch.delenv('ANTHROPIC_API_KEY', raising=False)
+    monkeypatch.delenv('OPENAI_API_KEY', raising=False)
+    monkeypatch.delenv('GEMINI_API_KEY', raising=False)
+    with pytest.raises(RuntimeError, match='No LLM provider'):
+        get_provider()
