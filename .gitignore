@@ -10,3 +10,5 @@ bin
 vendor/ruby
 Gemfile.lock
 images/raw/
+__pycache__/
+*.pyc
