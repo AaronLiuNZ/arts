@@ -50,3 +50,38 @@ def test_resize_creates_output_directory(tmp_path):
     dst = str(tmp_path / 'nested' / 'dir' / 'out.jpg')
     resize_image(src, dst)
     assert os.path.exists(dst)
+
+
+import yaml
+from scripts.stage import append_meta
+
+
+def test_append_meta_creates_new_file(tmp_path):
+    meta = str(tmp_path / 'test.meta.yml')
+    result = append_meta(meta, 'IMG_001.jpg', 'My Title', 'My description.')
+    assert result is True
+    with open(meta) as f:
+        data = yaml.safe_load(f)
+    assert data['IMG_001.jpg']['title'] == 'My Title'
+    assert data['IMG_001.jpg']['description'] == 'My description.'
+
+
+def test_append_meta_skips_existing_key(tmp_path):
+    meta = str(tmp_path / 'test.meta.yml')
+    append_meta(meta, 'IMG_001.jpg', 'Original', 'Original desc.')
+    result = append_meta(meta, 'IMG_001.jpg', 'New Title', 'New desc.')
+    assert result is False
+    with open(meta) as f:
+        data = yaml.safe_load(f)
+    assert data['IMG_001.jpg']['title'] == 'Original'
+
+
+def test_append_meta_preserves_existing_entries(tmp_path):
+    meta = str(tmp_path / 'test.meta.yml')
+    append_meta(meta, 'IMG_001.jpg', 'First', 'First desc.')
+    append_meta(meta, 'IMG_002.jpg', 'Second', 'Second desc.')
+    with open(meta) as f:
+        data = yaml.safe_load(f)
+    assert 'IMG_001.jpg' in data
+    assert 'IMG_002.jpg' in data
+    assert data['IMG_001.jpg']['title'] == 'First'

@@ -1,4 +1,5 @@
 import os
+import yaml
 from PIL import Image
 
 
@@ -14,3 +15,16 @@ def resize_image(src_path: str, dst_path: str, max_long_edge: int = 1600) -> Non
             img.save(dst_path, 'JPEG', quality=85)
         else:
             img.save(dst_path, 'PNG')
+
+
+def append_meta(meta_path: str, filename: str, title: str, description: str) -> bool:
+    data = {}
+    if os.path.exists(meta_path):
+        with open(meta_path) as f:
+            data = yaml.safe_load(f) or {}
+    if filename in data:
+        return False
+    data[filename] = {'title': title, 'description': description}
+    with open(meta_path, 'w') as f:
+        yaml.dump(data, f, default_flow_style=False, allow_unicode=True)
+    return True
