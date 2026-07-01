@@ -2,9 +2,18 @@ import base64
 import json
 import os
 import re
+import shutil
 import sys
 import yaml
 from PIL import Image
+
+
+SUPPORTED_EXTS = {'.jpg', '.jpeg', '.png'}
+STAGE_DIR = 'images/stage'
+GALLERIES_DIR = 'images/galleries'
+RAW_DIR = 'images/raw'
+GALLERIES_DATA_DIR = '_galleries'
+META_SUFFIX = '.meta.yml'
 
 
 PROMPT = (
@@ -108,6 +117,97 @@ def get_provider(name: str = None):
     )
 
 
+def process_gallery(gallery: str, provider=None, no_llm: bool = False) -> None:
+    stage_path = os.path.join(STAGE_DIR, gallery)
+    if not os.path.isdir(stage_path):
+        print(f'  No stage folder: {stage_path}')
+        return
+
+    images = sorted(
+        f for f in os.listdir(stage_path)
+        if os.path.splitext(f)[1].lower() in SUPPORTED_EXTS
+    )
+    if not images:
+        print(f'  No staged images in {stage_path}')
+        return
+
+    gallery_out = os.path.join(GALLERIES_DIR, gallery)
+    raw_out = os.path.join(RAW_DIR, gallery)
+    meta_path = os.path.join(GALLERIES_DATA_DIR, f'{gallery}{META_SUFFIX}')
+    os.makedirs(gallery_out, exist_ok=True)
+    os.makedirs(raw_out, exist_ok=True)
+
+    for filename in images:
+        src = os.path.join(stage_path, filename)
+        dst = os.path.join(gallery_out, filename)
+        archive = os.path.join(raw_out, filename)
+        stem = os.path.splitext(filename)[0]
+
+        print(f'  {filename}')
+
+        resize_image(src, dst)
+        print(f'    resized → {dst}')
+
+        if not no_llm and provider is not None:
+            try:
+                result = provider.analyze_image(dst)
+                title = result.get('title', stem) if result else stem
+                description = result.get('description', 'tbc') if result else 'tbc'
+            except Exception as e:
+                print(f'    LLM warning: {e}')
+                title, description = stem, 'tbc'
+        else:
+            title, description = stem, 'tbc'
+
+        appended = append_meta(meta_path, filename, title, description)
+        if appended:
+            print(f'    meta: {title!r}')
+        else:
+            print(f'    meta: already exists, skipped')
+
+        shutil.move(src, archive)
+        print(f'    archived → {archive}')
+
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description='Stage images for the gallery pipeline.')
+    parser.add_argument('--gallery', help='Process only this gallery (default: all)')
+    parser.add_argument('--provider', choices=['claude', 'openai', 'gemini'],
+                        help='LLM provider (default: auto-detect from env)')
+    parser.add_argument('--no-llm', action='store_true',
+                        help='Skip LLM calls (resize + archive only)')
+    args = parser.parse_args()
+
+    provider = None
+    if not args.no_llm:
+        try:
+            provider = get_provider(args.provider)
+            print(f'Provider: {type(provider).__name__}')
+        except RuntimeError as e:
+            print(f'Warning: {e}')
+            print('Continuing without LLM metadata (use --no-llm to suppress this warning).')
+
+    if args.gallery:
+        galleries = [args.gallery]
+    else:
+        if not os.path.isdir(STAGE_DIR):
+            print(f'Stage directory not found: {STAGE_DIR}')
+            print('Create images/stage/<gallery-name>/ and drop images there.')
+            sys.exit(0)
+        galleries = sorted(
+            d for d in os.listdir(STAGE_DIR)
+            if os.path.isdir(os.path.join(STAGE_DIR, d))
+        )
+        if not galleries:
+            print('No gallery subfolders found in images/stage/')
+            sys.exit(0)
+
+    for gallery in galleries:
+        print(f'Gallery: {gallery}')
+        process_gallery(gallery, provider=provider, no_llm=args.no_llm)
+
+
 def resize_image(src_path: str, dst_path: str, max_long_edge: int = 1600) -> None:
     with Image.open(src_path) as img:
         w, h = img.size
@@ -133,3 +233,7 @@ def append_meta(meta_path: str, filename: str, title: str, description: str) -> 
     with open(meta_path, 'w') as f:
         yaml.dump(data, f, default_flow_style=False, allow_unicode=True)
     return True
+
+
+if __name__ == '__main__':
+    main()
