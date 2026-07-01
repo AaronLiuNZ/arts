@@ -28,15 +28,15 @@ def _parse_json(text: str):
 class ClaudeProvider:
     def __init__(self):
         import anthropic
-        self._client = anthropic.Anthropic()
+        self._anthropic = anthropic
 
     def analyze_image(self, image_path: str) -> dict:
-        import anthropic
+        client = self._anthropic.Anthropic()
         ext = os.path.splitext(image_path)[1].lower()
         media_type = 'image/png' if ext == '.png' else 'image/jpeg'
         with open(image_path, 'rb') as f:
             data = base64.standard_b64encode(f.read()).decode()
-        response = self._client.messages.create(
+        response = client.messages.create(
             model='claude-opus-4-8',
             max_tokens=256,
             messages=[{'role': 'user', 'content': [
@@ -50,14 +50,15 @@ class ClaudeProvider:
 class OpenAIProvider:
     def __init__(self):
         import openai
-        self._client = openai.OpenAI()
+        self._openai = openai
 
     def analyze_image(self, image_path: str) -> dict:
+        client = self._openai.OpenAI()
         ext = os.path.splitext(image_path)[1].lower()
         media_type = 'image/png' if ext == '.png' else 'image/jpeg'
         with open(image_path, 'rb') as f:
             data = base64.standard_b64encode(f.read()).decode()
-        response = self._client.chat.completions.create(
+        response = client.chat.completions.create(
             model='gpt-4o',
             max_tokens=256,
             messages=[{'role': 'user', 'content': [
@@ -72,22 +73,36 @@ class GeminiProvider:
     def __init__(self):
         import google.generativeai as genai
         genai.configure(api_key=os.environ.get('GEMINI_API_KEY'))
-        self._model = genai.GenerativeModel('gemini-2.0-flash')
+        self._genai = genai
 
     def analyze_image(self, image_path: str) -> dict:
+        model = self._genai.GenerativeModel('gemini-2.0-flash')
         from PIL import Image as PILImage
         img = PILImage.open(image_path)
-        response = self._model.generate_content([PROMPT, img])
+        response = model.generate_content([PROMPT, img])
         return _parse_json(response.text)
 
 
 def get_provider(name: str = None):
-    if name == 'claude' or (name is None and os.environ.get('ANTHROPIC_API_KEY')):
+    if name == 'claude':
+        if not os.environ.get('ANTHROPIC_API_KEY'):
+            raise RuntimeError('ANTHROPIC_API_KEY is required for --provider claude')
         return ClaudeProvider()
-    if name == 'openai' or (name is None and os.environ.get('OPENAI_API_KEY')):
+    if name == 'openai':
+        if not os.environ.get('OPENAI_API_KEY'):
+            raise RuntimeError('OPENAI_API_KEY is required for --provider openai')
         return OpenAIProvider()
-    if name == 'gemini' or (name is None and os.environ.get('GEMINI_API_KEY')):
+    if name == 'gemini':
+        if not os.environ.get('GEMINI_API_KEY'):
+            raise RuntimeError('GEMINI_API_KEY is required for --provider gemini')
         return GeminiProvider()
+    if name is None:
+        if os.environ.get('ANTHROPIC_API_KEY'):
+            return ClaudeProvider()
+        if os.environ.get('OPENAI_API_KEY'):
+            return OpenAIProvider()
+        if os.environ.get('GEMINI_API_KEY'):
+            return GeminiProvider()
     raise RuntimeError(
         'No LLM provider available. Set ANTHROPIC_API_KEY, OPENAI_API_KEY, or GEMINI_API_KEY.'
     )
