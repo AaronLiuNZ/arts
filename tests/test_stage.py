@@ -1,7 +1,8 @@
 import os
 import pytest
+import yaml
 from PIL import Image
-from scripts.stage import resize_image
+from scripts.stage import append_meta, resize_image
 
 
 def make_image(tmp_path, width, height, fmt='JPEG', name='test.jpg'):
@@ -50,10 +51,6 @@ def test_resize_creates_output_directory(tmp_path):
     dst = str(tmp_path / 'nested' / 'dir' / 'out.jpg')
     resize_image(src, dst)
     assert os.path.exists(dst)
-
-
-import yaml
-from scripts.stage import append_meta
 
 
 def test_append_meta_creates_new_file(tmp_path):
