@@ -8,36 +8,12 @@ arts:
   artist: "Aaron Liu"
   description: "Acrylic on paper" 
   
-- image: "images/galleries/illustration/Expectation.jpg"
-  order: "2"
-  title: "title"
-  artist: "Gustav Klimt"
-  description: "description"
-
-- image: "images/galleries/illustration/hygeia-detail-of-medicine-1907.jpg"
-  order: "3"
-  title: "title"
-  artist: "Aaron Liu"
-  description: "xxxx"
-
 # Column 2
 - image: "images/galleries/illustration/IMG_9777.png"
   order: "4"
   title: "Manet master copy 2026"
   artist: "Aaron Liu"
   description: "Oil on Paper"
-
-- image: "images/galleries/illustration/Lady-with-Hat-and-Feather-Boa.jpg"
-  order: "5"
-  title: "title"
-  artist: "Gustav Klimt"
-  description: "description"
-
-- image: "images/galleries/illustration/klimt.jpg"
-  order: "6"
-  title: "title"
-  artist: "Gustav Klimt"
-  description: "description"
  
 # Column 3
 - image: "images/galleries/illustration/IMG_9779.png"
@@ -45,41 +21,4 @@ arts:
   title: "Self portrait 2026"
   artist: "Aaron Liu"
   description: "Oil on canvas board"
-
-- image: "images/galleries/illustration/Country-Garden-With-Sunflowers.jpg"
-  order: "8"
-  title: "Country Garden With Sunflowers"
-  artist: "Gustav Klimt"
-  description: "dfjhtryf"
-  
-- image: "images/galleries/illustration/Fulfillment.jpg"
-  order: "9"
-  title: "title"
-  artist: "Gustav Klimt"
-  description: "description"
-
-# Column 4
-- image: "images/galleries/illustration/Gustav_Klimt_046.jpg"
-  order: "10"
-  title: "title"
-  artist: "Gustav Klimt"
-  description: "description"
-  
-- image: "images/galleries/illustration/The-Tree-Of-Life.jpg"
-  order: "11"
-  title: "title"
-  artist: "Gustav Klimt"
-  description: "description"
-  
-- image: "images/galleries/illustration/music.jpg"
-  order: "12"
-  title: "title"
-  artist: "Gustav Klimt"
-  description: "description"
-  
-- image: "images/galleries/illustration/maxresdefault.jpg"
-  order: "13"
-  title: "title"
-  artist: "Gustav Klimt"
-  description: "description"
 ---
